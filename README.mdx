@@ -6,13 +6,67 @@
 
 It was very easy to get started. The homepage is very TTS-heavy given it's the Sonic page. There wasn't anything on the page indicating that STT or Agents are available, so I had to go into the top navigation bar.
 
-I also would have liked a realtime demo on the Agents page. Voice agents are a significant part of the business, and latency is a key differentiator. Let devs experience Line/the latency first hand so they’re comfortable investing into it and rolling it out to their customers.
+I was expecting a realtime demo on the Agents page. I assume voice agents are a priority for the business and latency is a key differentiator. We should let devs experience Line/the latency first hand so they feel comfortable investing into it and rolling it out to their customers.
 
-Pricing was initially overwhelming, but once I focused on my use case (I was pretending to be a dev building healthcare agents) it made sense. The mismatch between concurrency for TTS vs. Line was the only thing that seemed off. I understand why TTS concurrency is lower (GPU capacity planning), but as a dev, I can’t utilize additional agents without TTS.
+Pricing was initially overwhelming, but once I focused on my use case (I was assuming the role of a dev building healthcare agents) it made sense. The mismatch between concurrency for TTS vs. Line was the only thing that seemed off. I understand why TTS concurrency is lower (GPU capacity planning), but as a dev, I can’t utilize additional agents without TTS.
 
 The `Getting Started`/`Models` docs are excellent. My only complaint is there was only a passing mention of the other available TTS endpoints and Bytes data types. For developers who want to use the WebSocket endpoint, which I imagine is a large percentage, there should be some mention in `Getting Started` or `SDKs`.
 
-*Disclaimer: My Python is rusty.* The `Agents` docs are very comprehensive. The number of first-class concepts is overwhelming, and the things I cared about (e.g., tool-calling) were more complicated than I hoped. I imagine they're optimized for AI to comprehend, but as a developer, I’d like the docs to be more approachable - even a simple diagram would help.
+I also found what appears to be a bug with the mp3 Bytes call. Depending on Sample Rate, the audio playback speed is altered.
+
+16k is fast and high pitched, 48k is slow and low pitched. The only one that worked is 44.1k.
+
+```
+curl -N -X POST "https://api.cartesia.ai/tts/bytes" \
+        -H "Cartesia-Version: 2025-04-16" \
+        -H "X-API-Key: $CARTESIA_API_KEY" \
+        -H "Content-Type: application/json" \
+        -d '{
+            "transcript": "Howdy!",
+            "model_id": "sonic-3",
+            "voice":
+                {
+                    "mode":"id",
+                    "id": "694f9389-aac1-45b6-b726-9d9369183238"
+                },
+            "output_format":
+                {
+                    "container":"mp3",
+                    "bit_rate":64000,
+                    "sample_rate":44100
+                }
+            }' > howdy_sample.mp3
+```
+
+[//]: # (Snippets begin)
+
+#### Example Audio Snippets
+
+<audio controls>
+  <source src="./Snippets/16k.mp3" type="audio/mp3">
+  Your browser does not support the audio element.
+</audio>
+
+**16k.mp3**
+
+<audio controls>
+  <source src="./Snippets/48k.mp3" type="audio/mp3">
+  Your browser does not support the audio element.
+</audio>
+
+**48k.mp3**
+
+<audio controls>
+  <source src="./Snippets/441k.mp3" type="audio/mp3">
+  Your browser does not support the audio element.
+</audio>
+
+**441k.mp3**
+
+[//]: # (Snippets end)
+
+
+ The `Agents` docs are very comprehensive. The number of first-class concepts is broad, so a diagram would help build understanding of the interplay more quickly.
 
 I didn't see a way to bring my own phone number from Twilio or update prompts/transfer to a human. If Line is going to stay low-level, those are opportunities. I suspect I could solve them (maybe) with custom Python.
 
