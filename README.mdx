@@ -49,11 +49,11 @@ There was friction there.
 
 ## Part 2: (30 min)
 
-- **MKT, Weekly:** Website visits, broken down by UTM parameter. Checked weekly. Useful for monitoring traffic sources and which channels are working.
+- **MKT, Weekly:** Website visits, broken down by UTM parameter. Useful for monitoring traffic sources and which channels are working.
 - **MKT, Weekly:** Page visits/Website Actions -> Sign Up – gives insight into website touchpoints that resonate most. Pages, demos, etc.
 - **ACT, Weekly:** Pageview -> Sign Ups -> Activations (generated 2-3 TTS snippets/made API call/created agent) – general pulse on the top of funnel. Ideally, this steadily grows over time and most sign-ups activate.
 - **ACT, Weekly:** API Key creations – a great leading indicator of the usage we hope for.
-- **ACT, Weekly:** API activations (2+ successful calls) – are users successfully running code with Cartesia's API? This signals strong intent.
+- **ACT, Weekly:** API activations (2+ successful API calls) – are users successfully running code with Cartesia's API? This signals strong intent.
 - **ACT, Weekly:** Github connections – a leading indicator that devs plan to build agents beyond the initial text-to-agent.
 - **ACT, Weekly:** Line Agent activations (2+ realtime calls on an agent) – making agents is straightforward, but multiple calls with an agent shows intent to use.
 - **RET, Monthly:** WAU split (New, Returning <7 days since last generation, Resurrecting >7 days since last, Churned)
@@ -68,13 +68,13 @@ Metrics are reviewed **weekly** in cross-functional product/leadership sync and 
 
 **How metrics guide future iterations:**
 
-Post-launch, these metrics directly inform prioritization, roadmap, and iteration focus (e.g., features with stalled adoption trigger UX reviews; outperforming features get upgrades and suggest new markets for GTM).
+Post-launch, these metrics directly inform prioritization, roadmap, and iteration focus (e.g., features with stalled adoption trigger reviews; outperforming features get upgrades and suggest new markets for GTM).
 
 Evangelizing the culture comes in two ways:
 
 1. Practice what I preach. When discussing product changes or outcomes, include a relevant metric whenever possible.
 2. Every product change should mostly impact 1–2 core team metrics. Everything should help users build better AI voice agents, and the impact should be visible in those metrics. You can even gamify it so the team sees the value of their work directly.
-3. Bring metrics to the team. If there are TVs, display the main metrics. During meetings, tie asks and outcomes to metric deltas.
+3. Bring metrics to the team. If there are TVs in office, display the main metrics. During meetings, tie asks and outcomes to metric deltas.
 
 For example, for the emotion tagging feature, the product manager and engineers should know why it’s being built (use cases that require expressive voices + increase adoption), and once released, where to view adoption and retention metrics. After a week, add a short slide to all-hands showing before/after and adoption numbers to tie real business value to the change.
 
@@ -87,14 +87,14 @@ My two experiment candidates, prioritized:
 Many users sign up and churn at various stages. Trigger emails based on inactivity/product actions (e.g., if 48 hrs after signup, user hasn’t generated anything, send an educational + incentive-based campaign about credits, new features, and usage examples).
 
 **Metric:** Activations, resurrections (WAU), conversion to paid.  
-**Estimated lift:** Drip campaigns can boost re-activations by 8–15%. With baseline sign-up-to-activation at ~40% (guess), a +10% relative lift here would be substantial (~4% absolute gain on total signups).
+**Estimated lift:** Drip campaigns can boost activations by 8–15%. With baseline sign-up-to-activation at ~40% (guess), a +10% relative lift here would be substantial (~4% absolute gain on total signups).
 
 ### 2: Larger bet – Allow Text-to-agent to generate code with tool calls, logic, transfer, metrics
 
 Currently Text-to-agent only supports single-prompt agents. Adding logic/tool-calling unlocks more real business use cases. This would likely require 4-6+ weeks of design and build.
 
 **Metric:** Line agent activations, new agent creation.  
-**Estimated lift:** Expecting a 20–30% increase in line agent activation rate over 2 quarters, based on increased ability to build real-world agents, but this would need close monitoring and gradual rollout.
+**Estimated lift:** Expecting a 20–30% increase in line agent activation rate, based on increased ability to build real-world agents, but this would need close monitoring and gradual rollout.
 
 # Appendix: Initial Notes: Detailed Feedback
 
