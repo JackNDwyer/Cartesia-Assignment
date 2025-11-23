@@ -1,4 +1,88 @@
-**I am using AI to proofread and clean up my code, but I wrote 100% of this myself as a first draft.**
+** I wrote 100% of this myself as a first draft. I then used AI to proofread and shorten some of my sentences.**
+
+(I will include detailed notes below the 3 parts)
+
+Part 1: (20 min)
+
+It was very easy to get started. The homepage is very TTS-heavy given it's the Sonic page. There wasn't anything on the page indicating that STT or Agents are available, so I had to go into the top navigation bar.
+
+I also would have liked a realtime demo on the Agents page. Voice agents are a significant part of the business, and latency is a key differentiator. Let devs experience Line/the latency first hand so they’re comfortable rolling it out to their customers.
+
+Pricing was initially overwhelming, but once I focused on my use case it made sense. The mismatch between concurrency for TTS and Agents was the only thing that seemed off. I understand why TTS concurrency is lower (GPU capacity planning), but as a dev, I can’t utilize additional agents without TTS.
+
+The `Getting Started`/`Models` docs are excellent. My only complaint is there was only a passing mention of the other available TTS endpoints and Bytes data types. For developers who want to use the WebSocket endpoint, which I imagine is a large percentage, there should be some mention in `Getting Started` or `SDKs`.
+
+*Disclaimer: My Python is rusty.* The `Agents` docs are very comprehensive. The number of first-class concepts is overwhelming, and the things I cared about (e.g., tool-calling) were more complicated than I hoped. I imagine they're optimized for AI to comprehend, but as a developer, I’d like the docs to be more approachable - even a simple diagram would help.
+
+I didn't see a way to bring my own phone number from Twilio or update prompts/transfer to a human. If Line is going to stay low-level, those are opportunities. I suspect I could solve them (maybe) with custom Python.
+
+The playground was simple to use. I quickly generated a snippet and tried a handful of voices/words tailored to my use case. I ran into confusion with the example prompts. There was no simple way to try different ones without deleting the filled prompt, and if I select an example prompt and then change from Sonic 3 to Sonic 2, the TTS model will speak emotes like "Laughter". Also, after using a cloned voice, my "Cartesia Voices" and "All Voices" tabs were identical, and I didn’t understand the voices sorting.
+
+I liked the pronunciation and cloning options, but everything felt scattered. There are eight different pages for voice in the playground, but I imagine this could be condensed to 3–4.
+1. `Narration` is very similar to `Text to Speech`. Adding an option to save generations would make them functionally identical.
+2. `Voices` is identical to the *Voices* menu in `Text to Speech`.
+3. The two different cloning pages can be consolidated.
+4. `Localization` and `Voice Changer` can become a `Voice Studio` page.
+
+The Agents page is where I ran into some headaches. `Text-to-agent` is underwhelming. There’s no option to add tool calling, and the single-prompt agent isn’t very useful to most business cases (at least without tool calling).
+
+Additionally, getting started with Agents is a significant investment. Initially, I saw an option to `Connect Your Code` which asked for a GitHub repo. Not having one, I had to connect my Github or copy a template.
+
+There was friction there.
+
+**Quick Wins:**
+- Add clear indication and navigation for Agents and STT on the homepage. (Likely low effort; major discoverability improvement.)
+- Streamline example prompt UX in Text to Speech paage so users can browse/select without deleting text. (UX tweak; easy to ship.)
+
+**Larger Lifts:**
+- Real-time agent demo on the Agents page to showcase quality/latency. (Higher effort, but builds early trust/validation with prospective users.)
+- Rework/merge redundant playground voice pages to reduce cognitive load of side navigation bar. (Requires coordination and UI rework, bigger initiative.)
+
+Part 2: (30 min)
+- MKT, Weekly: Website visits, broken down by UTM parameter. Checked weekly. Useful for monitoring traffic sources and which channels are working.
+- MKT, Weekly: Page visits/Website Actions -> Sign Up – gives insight into website touchpoints that resonate most. Pages, demos, etc.
+- ACT, Weekly: Pageview -> Sign Ups -> Activations (generated 2-3 TTS snippets/made API call/created agent) – general pulse on the top of funnel. Ideally, this steadily grows over time and most sign-ups activate.
+- ACT, Weekly: API Key creations – a great leading indicator of the usage we hope for.
+- ACT, Weekly: API activations (2+ successful calls) – are users successfully running code with Cartesia's API? This signals strong intent.
+- ACT, Weekly: Github connections – a leading indicator that devs plan to build agents beyond the initial text-to-agent.
+- ACT, Weekly: Line Agent activations (2+ realtime calls on an agent) – making agents is straightforward, but multiple calls with an agent shows intent to use.
+- RET, Monthly: WAU split (New, Returning <7 days since last generation, Resurrecting >7 days since last, Churned)
+- RET, Monthly: 7 Day Retention – do users stick with the product 1–3 weeks later? This is probably the most important metric for sustained growth and satisfaction.
+- RET, Monthly: Account level growth – are accounts increasing usage week over week?
+- GEN, Monthly: WAU for each playground feature – what do people gravitate toward? What’s unused? Likewise for API calls, voices, emotes, etc. This gives an overview of overall product footprint.
+- GEN, Monthly: Minutes of generated Speech, Transcription, Realtime – general product usage over time. More usage = more value delivered.
+
+**Metrics Review Cadence & Audience**: Metrics are reviewed weekly in cross-functional product/leadership sync and monthly in all-hands or business review meetings. Key product-level metrics surface in dashboards visible to all teams. Feature-level or experiment-specific metrics are highlighted in retro and post-launch summaries.
+
+**How metrics guide future iterations:** Post-launch, these metrics directly inform prioritization, roadmap, and iteration focus (e.g., features with stalled adoption trigger UX reviews; outperforming features get upgrades and suggest new markets for GTM).
+
+Evangelizing the culture comes in two ways:
+1. Practice what I preach. When discussing product changes or outcomes, include a relevant metric whenever possible.
+2. Every product change should mostly impact 1–2 core team metrics. Everything should help users build better AI voice agents, and the impact should be visible in those metrics. You can even gamify it so the team sees the value of their work directly.
+3. Bring metrics to the team. If there are TVs, display the main metrics. During meetings, tie asks and outcomes to metric deltas.
+
+For example, for the emotion tagging feature, the product manager and engineers should know why it’s being built (use cases that require expressive voices + increase adoption), and once released, where to view adoption and retention metrics. After a week, add a short slide to all-hands showing before/after and adoption numbers to tie real business value to the change.
+
+# Part 3: (30 min)
+What would you build?
+What metric would it impact?
+How much lift can you expect?
+If needed, note your intuition-based estimate of that metric's baseline.
+
+My two experiment candidates, prioritized:
+
+## 1: Quick win – Email drip campaign for unengaged users
+Many users sign up and churn at various stages. Trigger emails based on inactivity/product actions (e.g., if 48 hrs after signup, user hasn’t generated anything, send an educational + incentive-based campaign about credits, new features, and usage examples).
+**Metric:** Activations, resurrections (WAU), conversion to paid.
+**Estimated lift:** Drip campaigns can boost re-activations by 8–15%. With baseline sign-up-to-activation at ~40%, a +10% relative lift here would be substantial (~4% absolute gain on total signups).
+
+## 2: Larger bet – Allow Text-to-agent to generate code with tool calls, logic, transfer, metrics
+Currently Text-to-agent only supports single-prompt agents. Adding logic/tool-calling unlocks more real business use cases. This would likely require 4-6+ weeks of design and build.
+**Metric:** Line agent activations, new agent creation.
+**Estimated lift:** Expecting a 20–30% increase in line agent activation rate over 2 quarters, based on increased ability to build real-world agents, but this would need close monitoring and gradual rollout.
+
+
+# Appendix: Detailed Feedback
 
 First Impressions (90 min)
 
@@ -208,87 +292,3 @@ Then, the templates available are of mixed value. The Basic Chat was fine but ba
 ### Idea: Link to the GitHub repo from the Cartesia dashboard.
 
 The repo itself is clear. Good README, clean code. My only gripe is how much code there is—it’s very low level, which makes rapid testing harder. I can use Cursor to make edits, which solves most of that problem.
-
-Part 1: (20 min)
-
-It was very easy to get started. The homepage is very TTS-heavy given it's the Sonic page. There wasn't anything on the page indicating that STT or Agents are available, so I had to go into the top navigation bar.
-
-I also would have liked a realtime demo on the Agents page. Voice agents are a significant part of the business, and latency is a key differentiator. Let devs experience Line/the latency first hand so they’re comfortable rolling it out to their customers.
-
-Pricing was initially overwhelming, but once I focused on my use case it made sense. The mismatch between concurrency for TTS and Agents was the only thing that seemed off. I understand why TTS concurrency is lower (GPU capacity planning), but as a dev, I can’t utilize additional agents without TTS.
-
-The `Getting Started`/`Models` docs are excellent. My only complaint is there was only a passing mention of the other available TTS endpoints and Bytes data types. For developers who want to use the WebSocket endpoint, which I imagine is a large percentage, there should be some mention in `Getting Started` or `SDKs`.
-
-*Disclaimer: My Python is rusty.* The `Agents` docs are very comprehensive. The number of first-class concepts is overwhelming, and the things I cared about (e.g., tool-calling) were more complicated than I hoped. I imagine they're optimized for AI to comprehend, but as a developer, I’d like the docs to be more approachable - even a simple diagram would help.
-
-I didn't see a way to bring my own phone number from Twilio or update prompts/transfer to a human. If Line is going to stay low-level, those are opportunities. I suspect I could solve them (maybe) with custom Python.
-
-The playground was simple to use. I quickly generated a snippet and tried a handful of voices/words tailored to my use case. I ran into confusion with the example prompts. There was no simple way to try different ones without deleting the filled prompt, and if I select an example prompt and then change from Sonic 3 to Sonic 2, the TTS model will speak emotes like "Laughter". Also, after using a cloned voice, my "Cartesia Voices" and "All Voices" tabs were identical, and I didn’t understand the voices sorting.
-
-I liked the pronunciation and cloning options, but everything felt scattered. There are eight different pages for voice in the playground, but I imagine this could be condensed to 3–4.
-1. `Narration` is very similar to `Text to Speech`. Adding an option to save generations would make them functionally identical.
-2. `Voices` is identical to the *Voices* menu in `Text to Speech`.
-3. The two different cloning pages can be consolidated.
-4. `Localization` and `Voice Changer` can become a `Voice Studio` page.
-
-The Agents page is where I ran into some headaches. `Text-to-agent` is underwhelming. There’s no option to add tool calling, and the single-prompt agent isn’t very useful to most business cases (at least without tool calling).
-
-Additionally, getting started with Agents is a significant investment. Initially, I saw an option to `Connect Your Code` which asked for a GitHub repo. Not having one, I had to connect my Github or copy a template.
-
-There was considerable friction there.
-
-Metrics I only briefly looked at. They seem okay for an MVP. As long as users can get an aggregate view of call outcomes, it’s in a good spot.
-
-The three things I would change:
-1. The homepage is the first touchpoint to frame the offering and build trust. If Cartesia is to be a one-stop Voice Agent platform (as I was told), we should talk more about Line/Ink and present it as a comprehensive solution. TTS is overrepresented since the landing page is /sonic. If Line is to be pushed, we should add a demo so devs can try a voice agent. Now, devs must go through several steps to make one themselves before trying.
-2. Consolidating the sidebar would clean up the playground. As mentioned, there’s redundancy across Text-to-speech, Voices, and Narration. There’s also a voice-specific page that conveys the voice name, ID, language, etc. I don’t believe this adds value, and if anything, creates more cognitive overhead for users we want generating snippets and building agents.
-3. Text-to-agents should allow for tool calls. Voice agents exist to replace humans who talk **and** do things. As I understand it, the Text-to-agents feature generates Voice Agents that can talk but not do things. While this is a bigger lift, since agents/tool calls are code-based, until then I suspect devs find this feature lacking.
-
-Part 2: (30 min)
-- MKT, Weekly: Website visits, broken down by UTM parameter. Checked weekly. Useful for monitoring traffic sources and which channels are working. 
-- MKT, Weekly: Page visits/Website Actions -> Sign Up – gives insight into website touchpoints that resonate most. Pages, demos, etc.
-- ACT, Weekly: Pageview -> Sign Ups -> Activations (generated 2-3 TTS snippets/made API call/created agent) – general pulse on the top of funnel. Ideally, this steadily grows over time and most sign-ups activate.
-- ACT, Weekly: API Key creations – a great leading indicator of the usage we hope for.
-- ACT, Weekly: API activations (2+ successful calls) – are users successfully running code with Cartesia's API? This signals strong intent.
-- ACT, Weekly: Github connections – a leading indicator that devs plan to build agents beyond the initial text-to-agent.
-- ACT, Weekly: Line Agent activations (2+ realtime calls on an agent) – making agents is straightforward, but multiple calls with an agent shows intent to use.
-- RET, Monthly: WAU split (New, Returning <7 days since last generation, Resurrecting >7 days since last, Churned)
-- RET, Monthly: 7 Day Retention – do users stick with the product 1–3 weeks later? This is probably the most important metric for sustained growth and satisfaction.
-- RET, Monthly: Account level growth – are accounts increasing usage week over week?
-- GEN, Monthly: WAU for each playground feature – what do people gravitate toward? What’s unused? Likewise for API calls, voices, emotes, etc. This gives an overview of overall product footprint.
-- GEN, Monthly: Minutes of generated Speech, Transcription, Realtime – general product usage over time. More usage = more value delivered.
-
-Evangelizing the culture comes in two ways:
-1. Practice what I preach. When discussing product changes or outcomes, include a relevant metric whenever possible.
-2. Every product change should mostly impact 1–2 core team metrics. Everything should help users build better AI voice agents, and the impact should be visible in those metrics. You can even gamify it so the team sees the value of their work directly.
-3. Bring metrics to the team. If there are TVs, display the main metrics. During meetings, tie asks and outcomes to metric deltas.
-
-For example, for the emotion tagging feature, the product manager and engineers should know why it’s being built (use cases that require expressive voices + increase adoption), and once released, where to view adoption and retention metrics. After a week, add a short slide to all-hands showing before/after and adoption numbers to tie real business value to the change.
-
-# Part 3: (30 min)
-What would you build?
-What metric would it impact?
-How much lift can you expect?
-If needed, note your intuition-based estimate of that metric's baseline.
-
-My experiments would be:
-## 1: Create an email drip campaign for unengaged users (from the suggested templates)
-
-Many users sign up and churn at various stages for a variety of reasons. The product has information on user sign-up time and in-app activity, and there are clues in the data as to why users churn. I have had success with campaigns where emails are triggered based on a combination of user product activity and timing.
-
-For example, if 48 hrs pass after signup and no action is taken, send a series of emails showing off the product, explaining free credits, and other information that could get users to try the product.
-
-The core metrics impacted are resurrections (get people back for new features) and activations (convince new sign-ups to try the product).
-
-Lift depends on what the user last did. If they were active/paying and then left, they might have gone out of business or found another solution.
-
-My estimate: about 40% of sign-ups activate, and only 20% of those (so about 8% of sign-ups) convert to paying. With campaigns, both metrics should improve: more sign-ups will activate (probably +10%), and churned users will get a nudge, increasing the chance to try again or check out new features.
-
-## 2: Allow the Text-to-agent product in Line to generate code, including tool calls, logic, transfers, and metrics.
-
-Currently, Text-to-agent supports creating only a single-prompt voice agent. My belief is that without tool-calling (and logic, transfers, metrics), these agents are not useful for most business scenarios, which I suspect are most of Line’s use cases.
-
-I’d add features for Text-to-agent to generate tool calls, logic, transfers, and relevant metrics. This helps builders realize their vision more quickly, and rather than acting as an AI middle-man via Cursor, Cartesia’s AI (with product context) would generate the agent. I still think agents should be code-based, but connecting Git could become optional if agents are manageable via the UI playground.
-
-The main metric this impacts is activations on the Line product. More agents could be built—and, ideally, deployed to production—more easily. 
-
