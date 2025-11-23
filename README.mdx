@@ -1,0 +1,294 @@
+**I am using AI to proofread and clean up my code, but I wrote 100% of this myself as a first draft.**
+
+First Impressions (90 min)
+
+Being that I am familiar with Cartesia, I will be assuming the persona of a developer with a medium level of familiarity with Voice Agents. I am seeking an end-to-end solution to create voice agents to handle support calls for a health tech startup in El Paso, Texas, that manages appointment scheduling for English and Spanish speakers. I have a few workflows I hope to build, each needing decision trees and tool calling. I have experimented with LiveKit, Vapi, and ElevenLabs, and have also tried OpenAI's voice stack (TTS, STT, Pipeline vs Speech-to-speech, Realtime).
+
+I saw the Sonic 3 release on X and noticed Cartesia also has a voice agents product, so I am visiting the website for the first time to learn about Sonic 3 and their voice agents product.
+
+# Part 0: Website/Dashboard First Impressions (90 min including typing)
+
+## Website Homepage
+
+![Cartesia Homepage](/Public/hero-top-landing.png)
+
+At first glance, I'm seeing that Cartesia is primarily a text-to-speech inference provider. The homepage directs me to /sonic. The entire upper half of the homepage is centered around the new Sonic TTS model: it's fast, natural, and expressive, with voices for a variety of use cases.
+
+### Idea: As the Line and Ink products mature, create a new homepage that touches on all of these models (assuming strategically Cartesia wants to push those).
+
+![Agents Powering Sonic Page](/Public/agents-powering-sonic-page.png)
+
+As I scroll to the "Powering Agents" section, I initially think it’s about building voice agents, but instead, it continues discussing how Cartesia's TTS is powering voice agents.
+
+I do appreciate that multi-lingual support is mentioned, with different dialects of Spanish being listed.
+
+I see there is a TTS API, as well as an SDK. I also notice SOC 2, HIPAA, and PCI compliance.
+
+There is no mention of agents (or STT for that matter) on the homepage.
+
+### Idea: Mention Line Agents and Ink STT with links so users can cmd-click to open those pages in the background.
+
+## Website Agents Page
+With a grasp of the TTS product, I see “Agents” in the header.
+
+![Line Hero](/Public/hero-line.png)
+
+I'm now looking at what I hope to integrate. I see the text: "Line is a code-first ecosystem to get from zero—to your first agent—to your best agent, in record time."
+
+It's unclear what "Line" is: both the word and its usage, as well as "code-first ecosystem." Since I clicked Agents, I'm assuming Line is an agent builder.
+
+### Idea: Rework this slightly to something like "Line is a code-first agent builder to rapidly prototype and deploy flexible voice agents for any use case."
+
+![Line Start Anywhere](/Public/line-start-anywhere.png)
+
+This section inspires confidence that you offer what I need. My company already uses two LLMs (OpenAI and Gemini) that seem compatible, and it looks like you have templates to help get started, plus a text-to-agent feature.
+
+![Agents Features](/Public/agents-features.png)
+
+I do not see any mention of tool calling (other than a hidden RAG-focused Tool Calling bullet in the "Build" section). I also see no mention of building workflows, decision trees, or handoffs. It would also be nice to talk to a realtime agent to gauge quality/latency in production. Other websites let me do that instead of just showing snippets.
+
+### Idea: Communicate tool calling and handoffs/workflows more clearly.
+### Idea: Add a realtime demo.
+
+As I continue scrolling, there are a few industries listed, including Healthcare. I click on it.
+
+![Healthcare Page](/Public/healthcare-page.png)
+
+This page inspires confidence through social proof and real-world examples. I would still like to try one of the voice agents—via widget or phone number—but it builds trust.
+
+I click "Give it a try" and am taken to a Sign Up page. Before signing up, I want to view pricing and docs. There is no navigation on the sign up page, but before hitting back, I notice a small "?" and on click, it’s actually a menu. I click `Pricing` first.
+
+![Sign Up Page](/Public/sign-up-page.png)
+
+### Idea: Make the menu button more clear or add simple navigation to docs/pricing. The ? suggests support, but not necessarily docs/pricing.
+
+## Website Pricing Page
+![Pricing Main](/Public/pricing-main.png)
+
+This page generally makes sense. It's busy, but as I focus on what I need, it makes sense.
+
+I see a lot of numbers: monthly fees, credits, and agent credits. I don’t think I need cloning, but my organization expects up to 5 calls at once across 4 different agents.
+
+The startup plan seems okay for my use case: 5 concurrent on TTS, 5 agent slots with 20 concurrency.
+
+### Idea: Startup Plan = 20 Agents concurrency != 5 TTS concurrency. I understand the AI isn't always talking, but these numbers should be closer.
+
+Pricing is somewhat difficult to calculate. There is duration-based pricing for Line Agents and STT, but usage-based pricing for the TTS model.
+
+I then return to the Sign Up page, which strongly emphasizes Sonic 3.
+
+Idea: A testimonial or more use cases/functionality could be useful here. Right now it's just another announcement about Sonic 3.
+
+## Docs
+The Docs are very strong. Going through sequentially via the bottom nav was nice.
+
+Generating a snippet via cURL/Python/JS makes sense, though since I'm looking to create a voice agent, doing a bytes call, which seems more suited for batch calls, isn’t super relevant.
+
+I got it working very easily and the token-based auth is clear.
+
+```
+curl -N -X POST "https://api.cartesia.ai/tts/bytes" \
+        -H "Cartesia-Version: 2025-04-16" \
+        -H "X-API-Key: $CARTESIA_API_KEY" \
+        -H "Content-Type: application/json" \
+        -d '{
+            "transcript": "Howdy!",
+            "model_id": "sonic-3",
+            "voice":
+                {
+                    "mode":"id",
+                    "id": "694f9389-aac1-45b6-b726-9d9369183238"
+                },
+            "output_format":
+                {
+                    "container":"mp3",
+                    "bit_rate":64000,
+                    "sample_rate":44100
+                }
+            }' > howdy_sample.mp3
+```
+
+I'm not yet sold on using Cartesia's Agents product, but I do like the TTS product and, regardless of which agents platform I use, I'll likely use Sonic TTS. I want to find a WebSocket endpoint. I eventually locate it in the API reference.
+
+![Docs Formats](/Public/docs-formats.png)
+
+### Idea: Link to the different TTS endpoints in the info box shown in the screenshot.
+
+## Playground Text to Speech
+
+**Note: I know your product very well so I'll continue writing from the persona of the dev.**
+
+![TTS Panel with Banner](/Public/tts-panel-with-banner.png)
+
+After signing up, the first thing I see is a `Text to Speech` page. I notice the banner on top announcing Sonic-3 is live. On my Macbook Air, this takes up a significant amount of screen real estate.
+
+### Idea: The banner can be shrunk to one line of text. It currently spans more than two.
+
+I see a strong emphasis on Voice Tools (it's the top section) on the sidebar.
+
+There are a few example prompts to get started with. Some appear to be real-time agents—"Schedule an appointment" or "Concierge." When I click them, they fill the Text-to-Speech box with a sentence.
+
+This is useful, as I'm learning to use the tool and trying different examples, but when I click one example prompt, they all disappear. If I hit speak, the text remains. When I realized I needed to erase the text to get prompts back, they're different examples.
+
+### Idea: Have an example prompt library that can easily be scrolled through—or pick a set of standard example prompts. Allow selecting other example prompts without needing to delete the filled text.
+
+![Emote Sonic 2](/Public/emote-sonic-2.png)
+
+Looking at the "Controls", I see multiple models. It defaults to Sonic 3. I was compelled to try different models, and when swapping models from Sonic 3 to Sonic 2 *after* clicking an example prompt, the emotion and emote tags remain—which is odd, since they don't work with Sonic 2. The model spoke the emote "Laughter" for Sonic 2.
+
+### Idea: When I change models, remove the emotion tags, or at least have the TTS model ignore them if incompatible and provide a warning: "model not compatible with emotion tags."
+
+Otherwise, controls make sense. Speed and Volume are intuitive. Transcription Language I assume lets me generate specific language snippets, even if that mismatches the voice language.
+
+![Emoji](/Public/emoji.png)
+
+When I use Sonic 3, emotions (reflected by different emojis) don't show in the text box, but they highlight on the sidebar, which I assume means they’re working.
+
+### Idea: The emoji buttons on the `Text to Speech` page should add the text tag in the text box. Right now users can add a text tag or use the emoji. If Cartesia wants to train users on text tags, tags should always be shown in the text box.
+
+I clicked "Voice", which looks like a dropdown, but then a modal appears.
+
+It starts on `All`, and then when I click "Cartesia Voices" nothing changes.
+
+![All Voices](/Public/all-voices.png)
+![Cartesia Voices](/Public/cartesia-voices.png)
+
+When I clone a voice and use it, the `RECENTLY USED` section in the `All` panel and the `Cartesia` panel remain identical. I'd expect `All` to include the new cloned voice I just used. If I scroll down in `All`, I do eventually get to my cloned voice, but I don’t understand the default sort order.
+
+### Idea: Order the `All` voices so it’s understandable for users, and ensure the `RECENTLY USED` section in `All` reflects recently used cloned voices. On refresh, it didn't update.
+
+![My Voices TTS](/Public/my-voices-tts.png)
+
+The "My Voices" panel is empty.
+
+![My Voices Voices](/Public/my-voices-voices.png)
+
+### Idea: Add a link to the cloning page in the empty state so users can create their own voice if they want. Same situation for "Starred." Instead of an empty state, give a CTA to `Star` favorite voices for easy access. This already exists for the empty state of `My Voices` on the `Voices` page.
+
+I like that on the Voices page, I can play a snippet from the list, but to get the voice ID I have to perform two clicks—one opens a menu with "Copy ID" and "Copy Link" options. The "Copy Link" URL takes me to a page that doesn’t display anything I can’t already see on the Text To Speech page.
+
+### Idea: Remove the "Copy Link" option and simply have a button to "Copy ID" at the top level for every voice.
+
+## Other Voice Tools
+
+Clicking through other voice tools quickly, the cloning options make sense. Localize voice I don’t fully understand—and there's nothing explaining it on the page. Voice changer is similar, I can intuit what it means, but it's unclear.
+
+### Idea: Add some text to explain the localizing and voice changer pages.
+
+## Library
+
+I see there’s a separate `Library` section. I feel `Voices` could stand alone or be combined with `Text to Speech`. `Pronunciation` is definitely a good candidate for `Voice Tools.`
+
+### Idea: The sidebar can be consolidated to `Voice`, `Line`, and `Platform`. `Voice` can contain everything it currently does plus `Pronunciation`. The `Voices` and `Text to Speech` pages can be consolidated (the primary value to users is finding a voice they like and generating snippets), and `Narration`, unless highly utilized, seems redundant and tries to compete with ElevenLabs.
+
+## Studio
+
+I don't understand what differentiates the narration section from the Text-to-Speech page. Both have exports and let you view past generations. I believe Narrations allows you to save the audio file as well, but otherwise not materially different—it would be easy to add that to the `Text to Speech` page.
+
+## Line
+![Agent FTUX](/Public/agent-ftux.png)
+
+I clicked around this panel.
+
+First I tried Text-to-agent, and as far as I can tell, all it did was use what I typed in. It's unclear if I can edit this agent in Github. I have to promote it to production before being given the option.
+
+![Text to Agent Prompting](/Public/text-to-agent-prompting.png)
+
+### Idea: Users will want a warm start with Text-to-agent. It doesn't provide much value currently, but with tool-calling and code editing it could. Generally, tool-calling feels like a big opportunity.
+
+Then I tried "Connect your code".
+
+I connected my Github and was asked to link a repo. I didn't have one, so backed out of that menu.
+
+### Idea: For FTUX, maybe pre-seed new accounts with a starter agent. The current text-to-agent doesn't provide much value, so having users go through these steps is low ROI. Another idea is to nudge them toward a template. Instead of just saying "empty" when there are no agents, provide a CTA.
+
+Then, the templates available are of mixed value. The Basic Chat was fine but basic. The Form Filler was very good and thorough.
+
+### Idea: I didn’t see any transfer logic or ability to update agent prompts.
+### Idea: Link to the GitHub repo from the Cartesia dashboard.
+
+The repo itself is clear. Good README, clean code. My only gripe is how much code there is—it’s very low level, which makes rapid testing harder. I can use Cursor to make edits, which solves most of that problem.
+
+Part 1: (20 min)
+
+It was very easy to get started. The homepage is very TTS-heavy given it's the Sonic page. There wasn't anything on the page indicating that STT or Agents are available, so I had to go into the top navigation bar.
+
+I also would have liked a realtime demo on the Agents page. Voice agents are a significant part of the business, and latency is a key differentiator. Let devs experience Line/the latency first hand so they’re comfortable rolling it out to their customers.
+
+Pricing was initially overwhelming, but once I focused on my use case it made sense. The mismatch between concurrency for TTS and Agents was the only thing that seemed off. I understand why TTS concurrency is lower (GPU capacity planning), but as a dev, I can’t utilize additional agents without TTS.
+
+The `Getting Started`/`Models` docs are excellent. My only complaint is there was only a passing mention of the other available TTS endpoints and Bytes data types. For developers who want to use the WebSocket endpoint, which I imagine is a large percentage, there should be some mention in `Getting Started` or `SDKs`.
+
+*Disclaimer: My Python is rusty.* The `Agents` docs are very comprehensive. The number of first-class concepts is overwhelming, and the things I cared about (e.g., tool-calling) were more complicated than I hoped. I imagine they're optimized for AI to comprehend, but as a developer, I’d like the docs to be more approachable - even a simple diagram would help.
+
+I didn't see a way to bring my own phone number from Twilio or update prompts/transfer to a human. If Line is going to stay low-level, those are opportunities. I suspect I could solve them (maybe) with custom Python.
+
+The playground was simple to use. I quickly generated a snippet and tried a handful of voices/words tailored to my use case. I ran into confusion with the example prompts. There was no simple way to try different ones without deleting the filled prompt, and if I select an example prompt and then change from Sonic 3 to Sonic 2, the TTS model will speak emotes like "Laughter". Also, after using a cloned voice, my "Cartesia Voices" and "All Voices" tabs were identical, and I didn’t understand the voices sorting.
+
+I liked the pronunciation and cloning options, but everything felt scattered. There are eight different pages for voice in the playground, but I imagine this could be condensed to 3–4.
+1. `Narration` is very similar to `Text to Speech`. Adding an option to save generations would make them functionally identical.
+2. `Voices` is identical to the *Voices* menu in `Text to Speech`.
+3. The two different cloning pages can be consolidated.
+4. `Localization` and `Voice Changer` can become a `Voice Studio` page.
+
+The Agents page is where I ran into some headaches. `Text-to-agent` is underwhelming. There’s no option to add tool calling, and the single-prompt agent isn’t very useful to most business cases (at least without tool calling).
+
+Additionally, getting started with Agents is a significant investment. Initially, I saw an option to `Connect Your Code` which asked for a GitHub repo. Not having one, I had to connect my Github or copy a template.
+
+There was considerable friction there.
+
+Metrics I only briefly looked at. They seem okay for an MVP. As long as users can get an aggregate view of call outcomes, it’s in a good spot.
+
+The three things I would change:
+1. The homepage is the first touchpoint to frame the offering and build trust. If Cartesia is to be a one-stop Voice Agent platform (as I was told), we should talk more about Line/Ink and present it as a comprehensive solution. TTS is overrepresented since the landing page is /sonic. If Line is to be pushed, we should add a demo so devs can try a voice agent. Now, devs must go through several steps to make one themselves before trying.
+2. Consolidating the sidebar would clean up the playground. As mentioned, there’s redundancy across Text-to-speech, Voices, and Narration. There’s also a voice-specific page that conveys the voice name, ID, language, etc. I don’t believe this adds value, and if anything, creates more cognitive overhead for users we want generating snippets and building agents.
+3. Text-to-agents should allow for tool calls. Voice agents exist to replace humans who talk **and** do things. As I understand it, the Text-to-agents feature generates Voice Agents that can talk but not do things. While this is a bigger lift, since agents/tool calls are code-based, until then I suspect devs find this feature lacking.
+
+Part 2: (30 min)
+- MKT, Weekly: Website visits, broken down by UTM parameter. Checked weekly. Useful for monitoring traffic sources and which channels are working. 
+- MKT, Weekly: Page visits/Website Actions -> Sign Up – gives insight into website touchpoints that resonate most. Pages, demos, etc.
+- ACT, Weekly: Pageview -> Sign Ups -> Activations (generated 2-3 TTS snippets/made API call/created agent) – general pulse on the top of funnel. Ideally, this steadily grows over time and most sign-ups activate.
+- ACT, Weekly: API Key creations – a great leading indicator of the usage we hope for.
+- ACT, Weekly: API activations (2+ successful calls) – are users successfully running code with Cartesia's API? This signals strong intent.
+- ACT, Weekly: Github connections – a leading indicator that devs plan to build agents beyond the initial text-to-agent.
+- ACT, Weekly: Line Agent activations (2+ realtime calls on an agent) – making agents is straightforward, but multiple calls with an agent shows intent to use.
+- RET, Monthly: WAU split (New, Returning <7 days since last generation, Resurrecting >7 days since last, Churned)
+- RET, Monthly: 7 Day Retention – do users stick with the product 1–3 weeks later? This is probably the most important metric for sustained growth and satisfaction.
+- RET, Monthly: Account level growth – are accounts increasing usage week over week?
+- GEN, Monthly: WAU for each playground feature – what do people gravitate toward? What’s unused? Likewise for API calls, voices, emotes, etc. This gives an overview of overall product footprint.
+- GEN, Monthly: Minutes of generated Speech, Transcription, Realtime – general product usage over time. More usage = more value delivered.
+
+Evangelizing the culture comes in two ways:
+1. Practice what I preach. When discussing product changes or outcomes, include a relevant metric whenever possible.
+2. Every product change should mostly impact 1–2 core team metrics. Everything should help users build better AI voice agents, and the impact should be visible in those metrics. You can even gamify it so the team sees the value of their work directly.
+3. Bring metrics to the team. If there are TVs, display the main metrics. During meetings, tie asks and outcomes to metric deltas.
+
+For example, for the emotion tagging feature, the product manager and engineers should know why it’s being built (use cases that require expressive voices + increase adoption), and once released, where to view adoption and retention metrics. After a week, add a short slide to all-hands showing before/after and adoption numbers to tie real business value to the change.
+
+# Part 3: (30 min)
+What would you build?
+What metric would it impact?
+How much lift can you expect?
+If needed, note your intuition-based estimate of that metric's baseline.
+
+My experiments would be:
+## 1: Create an email drip campaign for unengaged users (from the suggested templates)
+
+Many users sign up and churn at various stages for a variety of reasons. The product has information on user sign-up time and in-app activity, and there are clues in the data as to why users churn. I have had success with campaigns where emails are triggered based on a combination of user product activity and timing.
+
+For example, if 48 hrs pass after signup and no action is taken, send a series of emails showing off the product, explaining free credits, and other information that could get users to try the product.
+
+The core metrics impacted are resurrections (get people back for new features) and activations (convince new sign-ups to try the product).
+
+Lift depends on what the user last did. If they were active/paying and then left, they might have gone out of business or found another solution.
+
+My estimate: about 40% of sign-ups activate, and only 20% of those (so about 8% of sign-ups) convert to paying. With campaigns, both metrics should improve: more sign-ups will activate (probably +10%), and churned users will get a nudge, increasing the chance to try again or check out new features.
+
+## 2: Allow the Text-to-agent product in Line to generate code, including tool calls, logic, transfers, and metrics.
+
+Currently, Text-to-agent supports creating only a single-prompt voice agent. My belief is that without tool-calling (and logic, transfers, metrics), these agents are not useful for most business scenarios, which I suspect are most of Line’s use cases.
+
+I’d add features for Text-to-agent to generate tool calls, logic, transfers, and relevant metrics. This helps builders realize their vision more quickly, and rather than acting as an AI middle-man via Cursor, Cartesia’s AI (with product context) would generate the agent. I still think agents should be code-based, but connecting Git could become optional if agents are manageable via the UI playground.
+
+The main metric this impacts is activations on the Line product. More agents could be built—and, ideally, deployed to production—more easily. 
+
