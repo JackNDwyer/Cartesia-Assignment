@@ -8,7 +8,7 @@ It was very easy to get started. The homepage is very TTS-heavy given it's the S
 
 I also would have liked a realtime demo on the Agents page. Voice agents are a significant part of the business, and latency is a key differentiator. Let devs experience Line/the latency first hand so they’re comfortable rolling it out to their customers.
 
-Pricing was initially overwhelming, but once I focused on my use case it made sense. The mismatch between concurrency for TTS and Agents was the only thing that seemed off. I understand why TTS concurrency is lower (GPU capacity planning), but as a dev, I can’t utilize additional agents without TTS.
+Pricing was initially overwhelming, but once I focused on my use case (I was pretending to be a dev building healthcare agents) it made sense. The mismatch between concurrency for TTS and Agents was the only thing that seemed off. I understand why TTS concurrency is lower (GPU capacity planning), but as a dev, I can’t utilize additional agents without TTS.
 
 The `Getting Started`/`Models` docs are excellent. My only complaint is there was only a passing mention of the other available TTS endpoints and Bytes data types. For developers who want to use the WebSocket endpoint, which I imagine is a large percentage, there should be some mention in `Getting Started` or `SDKs`.
 
@@ -64,7 +64,7 @@ There was friction there.
 
 ### Metrics Review Cadence & Audience
 
-Metrics are reviewed **weekly** in cross-functional product/leadership sync and **monthly** in all-hands or business review meetings. Key product-level metrics surface in dashboards visible to all teams. Feature-level or experiment-specific metrics are highlighted in retro and post-launch summaries.
+Metrics are reviewed **weekly** in cross-functional product/leadership sync and **monthly** in all-hands or business review meetings. Key product-level metrics surface in dashboards visible to all teams. Feature-level or experiment-specific metrics are highlighted in retrospectives or post-launch summaries.
 
 **How metrics guide future iterations:**
 
@@ -87,7 +87,7 @@ My two experiment candidates, prioritized:
 Many users sign up and churn at various stages. Trigger emails based on inactivity/product actions (e.g., if 48 hrs after signup, user hasn’t generated anything, send an educational + incentive-based campaign about credits, new features, and usage examples).
 
 **Metric:** Activations, resurrections (WAU), conversion to paid.  
-**Estimated lift:** Drip campaigns can boost re-activations by 8–15%. With baseline sign-up-to-activation at ~40%, a +10% relative lift here would be substantial (~4% absolute gain on total signups).
+**Estimated lift:** Drip campaigns can boost re-activations by 8–15%. With baseline sign-up-to-activation at ~40% (guess), a +10% relative lift here would be substantial (~4% absolute gain on total signups).
 
 ### 2: Larger bet – Allow Text-to-agent to generate code with tool calls, logic, transfer, metrics
 
@@ -95,10 +95,6 @@ Currently Text-to-agent only supports single-prompt agents. Adding logic/tool-ca
 
 **Metric:** Line agent activations, new agent creation.  
 **Estimated lift:** Expecting a 20–30% increase in line agent activation rate over 2 quarters, based on increased ability to build real-world agents, but this would need close monitoring and gradual rollout.
-
-**Why prioritize these over other team suggestions?**
-
-Other suggestions (like an API playground, quickstart codegen, Slack/Discord integration, usage alerting) are valuable but either address narrower user segments, have less lifecycle impact, or are more supporting than core unlocks. The experiments above directly address biggest funnel blockages and unlock the most business/usage growth for a wide range of targets.
 
 # Appendix: Detailed Feedback
 
