@@ -1,10 +1,8 @@
 ## Part 2: Dashboarding
 MKT = Marketing, ACT = Activiation, RET = Retention, GEN = General
 
-- **MKT, Weekly:** Website visits, broken down by UTM parameter. Useful for monitoring traffic sources and which channels are working.
 - **MKT, Weekly:** Page visits/Website Actions -> Sign Up – gives insight into website touchpoints that resonate most. Pages, demos, etc.
 - **ACT, Weekly:** Pageview -> Sign Ups -> Activations (generated 120 sec TTS snippets in dashboard or made API call) – general pulse on the top of funnel. Ideally, this steadily grows over time and most sign-ups activate.
-- **ACT, Weekly:** API Key creations – a great leading indicator of the usage we hope for.
 - **ACT, Weekly:** API activations (made successful API call) – are users successfully running code with Cartesia's API? This signals strong intent.
 - **ACT, Weekly:** Github connections – a leading indicator that devs plan to build agents beyond the initial text-to-agent.
 - **ACT, Weekly:** Line Agent activations (2+ realtime phone-based calls on an agent) – making agents is straightforward, but multiple phone calls with an agent shows intent to use in production.
@@ -13,6 +11,8 @@ MKT = Marketing, ACT = Activiation, RET = Retention, GEN = General
 - **RET, Monthly:** Account level growth – are accounts increasing usage week over week?
 - **GEN, Monthly:** WAU for each playground feature – what do people gravitate toward? What’s unused? Likewise for API calls, voices, emotes, etc. This gives an overview of overall product footprint.
 - **GEN, Monthly:** Minutes of generated Speech, Transcription, Realtime – general product usage over time. More usage = more value delivered.
+- **GEN, Weekly:** % of TTS Regenerations - what percentage of TTS generations get re-done with similar parameters. Fewer regenerations = better first-time generations.
+- **GEN, Weekly:** TTS Attributes - which languages, voices, and emotions are users gravitating toward? Will help us identify which TTS attributes to invest more into.
 
 ### Metrics Review Cadence & Audience
 
