@@ -1,0 +1,67 @@
+**I didn't fully understand this section. I interpreted it as pick 2 experiments to run. They can be my idea, or I can pick from the last below. I chose 2 of my own, and I also talked a bit about drip campaigns since I've run those in the past.
+
+## Part 3: Experiment Design & Prioritization
+
+My three experiment candidates, prioritized:
+
+### 1: Quick win – Fix example prompt UX in Text to Speech playground
+
+**What to build:**
+
+Currently, when users click an example prompt in the Text to Speech playground, it fills the text box and all other example prompts disappear. If users want to try a different example, they have to delete the populated text first, which is frustrating. Additionally, when users swap models (e.g., from Sonic 3 to Sonic 2) after selecting an example prompt, emotion tags remain in the text even though they don't work with Sonic 2, causing the model to literally speak the word "Laughter".
+
+The fix involves two parts:
+
+1. Example prompt library UI: Instead of hiding all prompts after one is selected, show a persistent example prompt library (maybe a sidebar or dropdown) that users can scroll through.Prompts should be more relevant to business use cases, including some that utilize pronuncications and a broader range of emotes - our goal here is to build conviction in the user. When the user clicks a new example, it should replace the current text in the box without requiring manual deletion. This could be a simple modal or expandable section that stays accesible.
+
+2. Model compatibility check: When users change the TTS model, automatically strip or ignore incompatible emotion/emote tags and show a small warning toast: "Emotion tags removed - not compatible with [model name]". This prevents the awkward scenario where Sonic 2 speaks the word "Laughter" instead of laughing.
+
+This is mostly frontend work. Updating the playground component to maintain example prompt state and adding a model-change handler that sanitizes the transcript. Should be doable in 1-2 weeks with one engineer.
+
+**Metric:** Time to first successful TTS generation, playground engagement (snippets generated per session), utilization of prouncications and emotes.
+
+**Estimated lift:** This directly addresses a friction point I hit immediately. I'd expect a 15-20% improvement in users generating multiple snippets as well as a reduction in time to first generation for new users. Hard to quantify without baseline data, but the UX improvement should be immediately noticeable in user behavior.
+
+### 2: Larger bet – Allow Text-to-agent to generate code with tool calls, logic, transfer, metrics
+
+**What to build:**
+
+Right now, Text-to-agent creates a single-prompt voice agent that can talk but can't actually do things. For most business use cases, agents need tool calling (to interact with APIs, databases, etc.), conditional logic (decision trees, handoffs), transfer capabilities (escalate to human), phone number selection, and basic metrics tracking.
+
+The build would involve:
+
+1. Prompt parsing: When a user describes their agent in Text-to-agent, use an LLM to extract intent for tool calls, logic flows, and transfer scenarios. For example, if someone types "an El Paso-based agent that schedules appointments and transfers to a human if the customer is frustrated", the system should identify: tool calling, conditional logic, phone number area-code, and transfer trigger.
+
+2. Code generation: Generate Python code that includes the agent structure, tool definitions, conditional logic blocks, and transfer handlers. This could leverage the existing template system but make it dynamic based on the parsed requirements. The generated code should be Cartesia-ready (proper imports, Line SDK usage, etc.) and include comments explaining each section.
+
+3. Refinement: After generation, show users a preview of the generated code with editable sections. Let them modify tool definitions, adjust transfer logic, or add custom metrics before promoting to production. This could be a code editor component in the dashboard, or still require GitHub connection but with a "preview before connect" step.
+
+4. UI-only mode: Make GitHub connection optional. If users want to manage agents entirely in the UI, allow them to edit and deploy from the dashboard. If they prefer code-first, they can still connect GitHub and push changes there. This gives flexibility for different developer preferences.
+
+This is a bigger lift - probably 4-6 weeks with a small team (PM, 1-2 engineers, maybe a designer for the code preview UI). The LLM parsing needs to be robust enough to handle varied user descriptions, and the code generation needs to produce working, maintainable code.
+
+**Metric:** Line agent activations, new agent creation, agents deployed to production (vs. just created and abandoned), time from agent creation to first realtime call.
+
+**Estimated lift:** Expecting a 20–30% increase in line agent activation rate. The current Text-to-agent feature likely has low activation because the agents it creates aren't useful enough for real business cases. With tool calling and logic, more agents will actually get deployed and used. This would need close monitoring and gradual rollout. Maybe start with simple tool calling, then add logic/transfers in subsequent iterations.
+
+### Bonus: Quick win – Email drip campaign for unengaged users
+
+**What to build:**
+
+Many users sign up, explore a bit, and then churn at various stages. We have data on when users signed up, what they've done in the UI, and when they last were active. An email drip campaign can re-engage these users by sending targeted emails based on their behavior and timing.
+
+The campaign would work like this:
+
+1. Segmentation: Create user segments based on activity and time since signup. For example: "Signed up 48+ hours ago, no TTS generation", "Signed up 7+ days ago, generated 1-2 snippets but inactive for 3+ days", "Created an agent but never made a realtime call", "Was active/paying but churned 30+ days ago".
+
+2. Email content: For each segment, craft emails that address their specific friction point. For the "no generation" segment, send an email showcasing the product with examples, explaining free credits, and linking to a getting started guide. For the "created agent but no calls" segment, send tips on testing agents, or highlight the realtime demo if we build it. For churned users, send updates about new features (like the Text-to-agent improvements above or the Sonic 3 release) that might bring them back.
+
+3. Trigger logic: Set up automated triggers in your email platform (SendGrid, Postmark, etc.) that fire based on user state changes. For example, if a user hits the "48 hours, no generation" state, automatically enroll them in a 3-email sequence over the next week. If they activate during the sequence, remove them from further emails.
+
+4. Tracking: Add UTM parameters to all email links so you can track which emails drive signups, activations, and conversions. This helps you iterate on messaging and timing.
+
+This is mostly product/ops work - setting up the segmentation logic, writing email copy, configuring triggers in your email platform, and adding tracking. Could be done in 1-2 weeks with a PM and maybe a marketing/ops person. The technical lift is minimal if you already have an email platform integrated.
+
+**Metric:** Activations, resurrections (WAU), conversion to paid, email open rates and click-through rates.
+
+**Estimated lift:** Drip campaigns can boost activations by 8–15% based on industry benchmarks. With baseline sign-up-to-activation at ~40% (guess), a +10% relative lift here would be substantial (~4% absolute gain on total signups). For churned users, even a 5% resurrection rate would be meaningful for retention metrics.

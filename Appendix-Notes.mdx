@@ -1,142 +1,3 @@
-**I wrote 100% of this myself as a first draft. I then used AI to proofread and shorten some of my sentences + clean up formatting. This ended up taking ~5 hrs with the detailed notes**
-
-(I will include detailed first impressions/thoughts below the 3 parts).
-
-## Part 1: Playground Audit
-
-### Website
-It was very easy to get started. The homepage is very TTS-heavy given it's the Sonic page. There wasn't anything on the page indicating that STT or Agents are available, so I had to go into the top navigation bar.
-
-I was expecting a realtime demo on the Agents page. I assume voice agents are a priority for the business and latency is a key differentiator. We should let devs experience Line/the latency first hand so they feel comfortable investing into it and rolling it out to their customers.
-
-### Pricing
-Pricing was initially overwhelming, but once I focused on my use case (I was assuming the role of a dev building healthcare agents) it made sense. The mismatch between concurrency for TTS vs. Line was the only thing that seemed off. I understand why TTS concurrency is lower (GPU capacity planning), but as a dev, I can’t utilize additional agents without TTS.
-
-### TTS Docs
-The `Getting Started`/`Models` docs are excellent. My only complaint is there was only a passing mention of the other available TTS endpoints and Bytes data types. For developers who want to use the WebSocket endpoint, which I imagine is a large percentage, there should be some mention in `Getting Started` or `SDKs`.
-
-I also found what appears to be a bug with the mp3 `Bytes` call. WAVs produced expecte behavior, but depending on Sample Rate, the mp3 audio playback speed is altered.
-
-16k is fast and high pitched, 48k is slow and low pitched. 44.1k works as expected.
-
-```
-curl -N -X POST "https://api.cartesia.ai/tts/bytes" \
-        -H "Cartesia-Version: 2025-04-16" \
-        -H "X-API-Key: $CARTESIA_API_KEY" \
-        -H "Content-Type: application/json" \
-        -d '{
-            "transcript": "Howdy!",
-            "model_id": "sonic-3",
-            "voice":
-                {
-                    "mode":"id",
-                    "id": "694f9389-aac1-45b6-b726-9d9369183238"
-                },
-            "output_format":
-                {
-                    "container":"mp3",
-                    "bit_rate":64000,
-                    "sample_rate":44100 //16k or 48k produce clips below
-                }
-            }' > howdy_sample.mp3
-```
-
-#### Example Audio Snippets
-
-- **16k audio snippet:** [16k.mp3](./Snippets/16k.mp3)
-- **48k audio snippet:** [48k.mp3](./Snippets/48k.mp3)
-- **441k audio snippet:** [441k.mp3](./Snippets/441k.mp3)
-
-### Agents Docs
-The `Agents` docs are very comprehensive. The number of first-class concepts is broad, so a diagram would help build understanding of the interplay more quickly.
-
-I didn't see a way to bring my own phone number from Twilio or update prompts/transfer to a human. Even selecting my own Cartesia-provided phone number based on my region would be fine.
-
-### TTS Playground
-The playground was simple to use. I quickly generated a snippet and tried a handful of voices/words tailored to my use case. I ran into confusion with the example prompts. There was no simple way to try different example prompts without deleting the filled prompt, and if I select an example prompt and then change from Sonic 3 to Sonic 2, the TTS model will speak emotes like "Laughter". Also, after using a cloned voice, my "Cartesia Voices" and "All Voices" tabs were identical, and I didn’t understand the voices sorting.
-
-[![Example Prompts Video](https://img.youtube.com/vi/QavVoKRJLFw/0.jpg)](https://www.youtube.com/watch?v=QavVoKRJLFw)
-
-There are eight different pages for voice in the playground, but this could be condensed to 3–4.
-
-#### Redundancy
-1. `Narration` is very similar to `Text to Speech`. Adding an option to save generations would make them functionally identical.
-2. `Voices` is identical to the *Voices* menu in `Text to Speech`.
-3. The two different cloning pages can be consolidated.
-4. `Localization` and `Voice Changer` can become a `Voice Studio` page.
-
-### Line Playground
-The Agents page is where I ran into some headaches. `Text-to-agent` is underwhelming. There’s no option to add tool calling, and the single-prompt agent isn’t very useful to most business cases (at least without tool calling).
-
-Additionally, getting started with Agents is a significant investment. Initially, I saw an option to `Connect Your Code` which asked for a GitHub repo. Not having one, I had to connect my Github or copy a template.
-
-There was friction there.
-
-### Quick Wins
-
-- **Add clear indication and navigation for Agents and STT on the homepage.**  
-  (Likely low effort; major discoverability improvement.)
-
-- **Streamline example prompt UX in Text to Speech page so users can browse/select without deleting text.**  
-  (UX tweak; easy to ship.)
-
-### Larger Lifts
-
-- **Real-time agent demo on the Agents page to showcase quality/latency.**  
-  (Higher effort, but builds early trust/validation with prospective users.)
-
-- **Rework/merge redundant playground voice pages to reduce cognitive load of side navigation bar.**  
-  (Requires coordination and UI rework, bigger initiative.)
-
-## Part 2: Dashboarding
-
-- **MKT, Weekly:** Website visits, broken down by UTM parameter. Useful for monitoring traffic sources and which channels are working.
-- **MKT, Weekly:** Page visits/Website Actions -> Sign Up – gives insight into website touchpoints that resonate most. Pages, demos, etc.
-- **ACT, Weekly:** Pageview -> Sign Ups -> Activations (generated 2-3 TTS snippets/made API call/created agent) – general pulse on the top of funnel. Ideally, this steadily grows over time and most sign-ups activate.
-- **ACT, Weekly:** API Key creations – a great leading indicator of the usage we hope for.
-- **ACT, Weekly:** API activations (2+ successful API calls) – are users successfully running code with Cartesia's API? This signals strong intent.
-- **ACT, Weekly:** Github connections – a leading indicator that devs plan to build agents beyond the initial text-to-agent.
-- **ACT, Weekly:** Line Agent activations (2+ realtime calls on an agent) – making agents is straightforward, but multiple calls with an agent shows intent to use.
-- **RET, Monthly:** WAU split (New, Returning <7 days since last generation, Resurrecting >7 days since last, Churned)
-- **RET, Monthly:** 7 Day Retention – do users stick with the product 1–3 weeks later? This is probably the most important metric for sustained growth and satisfaction.
-- **RET, Monthly:** Account level growth – are accounts increasing usage week over week?
-- **GEN, Monthly:** WAU for each playground feature – what do people gravitate toward? What’s unused? Likewise for API calls, voices, emotes, etc. This gives an overview of overall product footprint.
-- **GEN, Monthly:** Minutes of generated Speech, Transcription, Realtime – general product usage over time. More usage = more value delivered.
-
-### Metrics Review Cadence & Audience
-
-Metrics are reviewed **weekly** in cross-functional product/leadership sync and **monthly** in all-hands or business review meetings. Key product-level metrics surface in dashboards visible to all teams. Feature-level or experiment-specific metrics are highlighted in retrospectives or post-launch summaries.
-
-**How metrics guide future iterations:**
-
-Post-launch, these metrics directly inform prioritization, roadmap, and iteration focus (e.g., features with stalled adoption trigger reviews; outperforming features get upgrades and suggest new markets for GTM).
-
-Evangelizing the culture comes in two ways:
-
-1. Practice what I preach. When discussing product changes or outcomes, include a relevant metric whenever possible.
-2. Every product change should mostly impact 1–2 core team metrics. Everything should help users build better AI voice agents, and the impact should be visible in those metrics. You can even gamify it so the team sees the value of their work directly.
-3. Bring metrics to the team. If there are TVs in office, display the main metrics. During meetings, tie asks and outcomes to metric deltas.
-
-For example, for the emotion tagging feature, the product manager and engineers should know why it’s being built (use cases that require expressive voices + increase adoption), and once released, where to view adoption and retention metrics. After a week, add a short slide to all-hands showing before/after and adoption numbers to tie real business value to the change.
-
-## Part 3: Experiment Design & Prioritization
-
-My two experiment candidates, prioritized:
-
-### 1: Quick win – Email drip campaign for unengaged users
-
-Many users sign up and churn at various stages. Trigger emails based on inactivity/product actions (e.g., if 48 hrs after signup, user hasn’t generated anything, send an educational + incentive-based campaign about credits, new features, and usage examples).
-
-**Metric:** Activations, resurrections (WAU), conversion to paid.  
-**Estimated lift:** Drip campaigns can boost activations by 8–15%. With baseline sign-up-to-activation at ~40% (guess), a +10% relative lift here would be substantial (~4% absolute gain on total signups).
-
-### 2: Larger bet – Allow Text-to-agent to generate code with tool calls, logic, transfer, metrics
-
-Currently Text-to-agent only supports single-prompt agents. Adding logic/tool-calling unlocks more real business use cases. This would likely require 4-6+ weeks of design and build.
-
-**Metric:** Line agent activations, new agent creation.  
-**Estimated lift:** Expecting a 20–30% increase in line agent activation rate, based on increased ability to build real-world agents, but this would need close monitoring and gradual rollout.
-
 # Appendix: Initial Notes: Detailed Feedback
 
 Being that I am familiar with Cartesia, I will be assuming the persona of a developer with a medium level of familiarity with Voice Agents. I am seeking an end-to-end solution to create voice agents to handle support calls for a health tech startup in El Paso, Texas, that manages appointment scheduling for English and Spanish speakers. I have a few workflows I hope to build, each needing decision trees and tool calling. I have experimented with LiveKit, Vapi, and ElevenLabs, and have also tried OpenAI's voice stack (TTS, STT, Pipeline vs Speech-to-speech, Realtime).
@@ -221,7 +82,7 @@ The Docs are very strong. Going through sequentially via the bottom nav was nice
 
 Generating a snippet via cURL/Python/JS makes sense, though since I'm looking to create a voice agent, doing a `Bytes` call, which seems more suited for batch calls, isn’t super relevant.
 
-I got it working very easily and the token-based auth is clear.
+I got it working very easily and the token-based auth is clear. I encountered what I believe is a bug where generated Mp3 files playback at different speeds based on Sample Rate.
 
 ```
 curl -N -X POST "https://api.cartesia.ai/tts/bytes" \
@@ -240,7 +101,7 @@ curl -N -X POST "https://api.cartesia.ai/tts/bytes" \
                 {
                     "container":"mp3",
                     "bit_rate":64000,
-                    "sample_rate":44100
+                    "sample_rate":44100 // 16000 causes fast, high pitch playback
                 }
             }' > howdy_sample.mp3
 ```

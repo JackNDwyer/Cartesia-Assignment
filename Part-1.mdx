@@ -1,0 +1,91 @@
+**I wrote 100% of this myself as a first draft. I then used AI to proofread and shorten some of my sentences + clean up formatting. This ended up taking ~5 hrs with the detailed notes**
+
+(I will include detailed first impressions/thoughts below the 3 parts).
+
+## Part 1: Playground Audit
+
+### Website
+It was very easy to get started. The homepage is very TTS-heavy given it's the Sonic page. There wasn't anything on the page indicating that STT or Agents are available, so I had to go into the top navigation bar.
+
+I was expecting a realtime demo on the Agents page. I assume voice agents are a priority for the business and latency is a key differentiator. We should let devs experience Line/the latency first hand so they feel comfortable investing into it and rolling it out to their customers.
+
+### Pricing
+Pricing was initially overwhelming, but once I focused on my use case (I was assuming the role of a dev building healthcare agents) it made sense. The mismatch between concurrency for TTS vs. Line was the only thing that seemed off. I understand why TTS concurrency is lower (GPU capacity planning), but as a dev, I can’t utilize additional agents without TTS.
+
+### TTS Docs
+The `Getting Started`/`Models` docs are excellent. My only complaint is there was only a passing mention of the other available TTS endpoints and Bytes data types. For developers who want to use the WebSocket endpoint, which I imagine is a large percentage, there should be some mention in `Getting Started` or `SDKs`.
+
+I also found what appears to be a bug with the mp3 `Bytes` call. WAVs produced expecte behavior, but depending on Sample Rate, the mp3 audio playback speed is altered.
+
+16k is fast and high pitched, 48k is slow and low pitched. 44.1k works as expected.
+
+```
+curl -N -X POST "https://api.cartesia.ai/tts/bytes" \
+        -H "Cartesia-Version: 2025-04-16" \
+        -H "X-API-Key: $CARTESIA_API_KEY" \
+        -H "Content-Type: application/json" \
+        -d '{
+            "transcript": "Howdy!",
+            "model_id": "sonic-3",
+            "voice":
+                {
+                    "mode":"id",
+                    "id": "694f9389-aac1-45b6-b726-9d9369183238"
+                },
+            "output_format":
+                {
+                    "container":"mp3",
+                    "bit_rate":64000,
+                    "sample_rate":44100 //16k or 48k produce clips below
+                }
+            }' > howdy_sample.mp3
+```
+
+#### Example Audio Snippets
+
+- **16k audio snippet:** [16k.mp3](./Snippets/16k.mp3)
+- **48k audio snippet:** [48k.mp3](./Snippets/48k.mp3)
+- **441k audio snippet:** [441k.mp3](./Snippets/441k.mp3)
+
+### Agents Docs
+The `Agents` docs are very comprehensive. The number of first-class concepts is broad, so a diagram would help build understanding of the interplay more quickly.
+
+I didn't see a way to bring my own phone number from Twilio or update prompts/transfer to a human. Even selecting my own Cartesia-provided phone number based on my region would be fine.
+
+### TTS Playground
+The playground was simple to use. I quickly generated a snippet and tried a handful of voices/words tailored to my use case. I ran into confusion with the example prompts. There was no simple way to try different example prompts without deleting the filled prompt, and if I select an example prompt and then change from Sonic 3 to Sonic 2, the TTS model will speak emotes like "Laughter". Also, after using a cloned voice, my "Cartesia Voices" and "All Voices" tabs were identical, and I didn’t understand the voices sorting.
+
+[![Example Prompts Video](https://img.youtube.com/vi/QavVoKRJLFw/0.jpg)](https://www.youtube.com/watch?v=QavVoKRJLFw)
+
+There are eight different pages for voice in the playground, but this could be condensed to 3–4.
+
+#### Redundancy
+1. `Narration` is very similar to `Text to Speech`. Adding an option to save generations would make them functionally identical.
+2. `Voices` is identical to the *Voices* menu in `Text to Speech`.
+3. The two different cloning pages can be consolidated.
+4. `Localization` and `Voice Changer` can become a `Voice Studio` page.
+
+### Voice Agents Playground Page
+The Agents page is where I ran into a few headaches.
+
+`Text-to-agent` is underwhelming. There’s no option to add tool calling, and the single-prompt agent isn’t very useful to most business cases (at least without tool calling). I also didn't understand why I couldn't connect my agent to Github without first promoting it to production; my guess is because it needs to know which version to promote to production, but this was unclear. I did like that I could "Download Candidate Code" to my computer and start building on it.
+
+I saw an option to `Connect Your Code` next, which asked for a GitHub repo. This makes sense once I'm up and running, but as a first time user, I didn't understand the order of operations. I then moved on to a Template - the templates are great.
+
+For Metrics, I was expecting some way to introduce determinism. In the Pizza Agent example, instead of an LLM deciding if the order was successful, can I compare extracted order to a PDF of the menu, or to an API call that fetches which items are available or places the order?
+
+### Quick Wins
+
+- **Add clear indication and navigation for Agents and STT on the homepage.**  
+  (Likely low effort; major discoverability improvement.)
+
+- **Streamline example prompt UX in Text to Speech page so users can browse/select without deleting text.**  
+  (UX tweak; easy to ship.)
+
+### Larger Lifts
+
+- **Real-time agent demo on the Agents website page to showcase quality/latency.**  
+  (Higher effort, but builds early trust/validation with prospective users.)
+
+- **Rework/merge redundant playground voice pages to reduce cognitive load of side navigation bar.**  
+  (Requires coordination and UI rework, bigger initiative.)
