@@ -10,11 +10,13 @@ My three experiment candidates, prioritized:
 
 Currently, when users click an example prompt in the Text to Speech playground, it fills the text box and all other example prompts disappear. If users want to try a different example, they have to delete the populated text first, which is frustrating. Additionally, when users swap models (e.g., from Sonic 3 to Sonic 2) after selecting an example prompt, emotion tags remain in the text even though they don't work with Sonic 2, causing the model to literally speak the word "Laughter".
 
+This change also allows users to try more example prompts early, exposing them to the range of TTS features.
+
 The fix involves two parts:
 
-1. Example prompt library UI: Instead of hiding all prompts after one is selected, show a persistent example prompt library (maybe a sidebar or dropdown) that users can scroll through.Prompts should be more relevant to business use cases, including some that utilize pronuncications and a broader range of emotes - our goal here is to build conviction in the user. When the user clicks a new example, it should replace the current text in the box without requiring manual deletion. This could be a simple modal or expandable section that stays accesible.
+1. Example prompt library UI: Instead of hiding all prompts after one is selected, show a persistent example prompt library (maybe a sidebar or dropdown) that users can scroll through. Prompts should be more relevant to business use cases, including some that utilize pronuncications and a broader range of emotes - our goal here is to build conviction in the user. When the user clicks a new example, it should replace the current text in the box without requiring manual deletion. This could be an expandable section that stays accesible.
 
-2. Model compatibility check: When users change the TTS model, automatically strip or ignore incompatible emotion/emote tags and show a small warning toast: "Emotion tags removed - not compatible with [model name]". This prevents the awkward scenario where Sonic 2 speaks the word "Laughter" instead of laughing.
+2. Model compatibility check: When users change the TTS model, automatically strip or ignore incompatible emotion/emote tags and show a small warning toast: "Emotion tags removed - not compatible with <model name>". This prevents the scenario where Sonic 2 speaks the word "Laughter" instead of laughing.
 
 This is mostly frontend work. Updating the playground component to maintain example prompt state and adding a model-change handler that sanitizes the transcript. Should be doable in 1-2 weeks with one engineer.
 
